@@ -53,6 +53,7 @@ Covered scenarios include:
 - Sign-up with invalid email format
 - Sign-up without password
 - Sign-up with short password
+- Sign-up with empty form 
 - Sign-up without accepting terms of use
 - Sign-up without accepting customer data privacy consent
 - Sign-up with invalid birth date format
