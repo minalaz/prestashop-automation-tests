@@ -11,6 +11,7 @@ The goal of the project is to demonstrate clean and maintainable UI test automat
 - Node.js
 - dotenv
 - Prettier
+- GitHub Actions
 
 ## Project Structure
 
@@ -199,8 +200,30 @@ To improve test stability, the project uses:
 - fresh test data generated for each test execution
 - Playwright auto-waiting mechanisms
 - page object methods that wait for key elements before interacting with the form
+- retry configuration for CI execution
 
 No account cleanup is performed because the tested application is a public demo environment and does not provide a stable cleanup mechanism for created accounts.
+
+## Continuous Integration
+
+The project includes a GitHub Actions workflow for running Playwright tests automatically and manually.
+
+The workflow is triggered on:
+
+- push to the `main` branch
+- pull request targeting the `main` branch
+- manual execution from the GitHub Actions tab
+
+The CI pipeline:
+
+- checks out the repository
+- sets up Node.js
+- installs project dependencies
+- installs Playwright browsers
+- runs the test suite
+- uploads the Playwright HTML report as an artifact
+
+Environment-specific values are provided through GitHub Repository Secrets.
 
 ## Environment Variables
 
