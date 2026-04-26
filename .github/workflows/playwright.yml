@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
       BASE_URL: ${{ secrets.BASE_URL }}
       DEFAULT_TIMEOUT: ${{ secrets.DEFAULT_TIMEOUT }}
       EXPECT_TIMEOUT: ${{ secrets.EXPECT_TIMEOUT }}
