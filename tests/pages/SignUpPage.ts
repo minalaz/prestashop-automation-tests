@@ -154,8 +154,10 @@ export class SignUpPage {
   private async expectAccountCreationToFail(data: SignUpData): Promise<void> {
     await expect(this.submitButton).toBeVisible();
 
-    if (data.expectedInvalidField) {
-      await this.expectInvalidField(data.expectedInvalidField);
+    if (data.expectedInvalidFields) {
+      for (const field of data.expectedInvalidFields) {
+        await this.expectInvalidField(field);
+      }
     }
 
     if (data.expectedErrorMessage) {

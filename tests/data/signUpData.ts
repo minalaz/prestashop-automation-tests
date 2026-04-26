@@ -21,7 +21,7 @@ export interface SignUpData {
   acceptPrivacy: boolean;
   shouldRegisterSuccessfully: boolean;
   expectedErrorMessage?: string;
-  expectedInvalidField?: InvalidField;
+  expectedInvalidFields?: InvalidField[];
 }
 
 export const invalidUsers = {
@@ -33,7 +33,7 @@ export const invalidUsers = {
     acceptTerms: true,
     acceptPrivacy: true,
     shouldRegisterSuccessfully: false,
-    expectedInvalidField: 'firstName',
+    expectedInvalidFields: ['firstName'],
   },
   withoutLastName: {
     firstName: generateFirstName(),
@@ -43,7 +43,7 @@ export const invalidUsers = {
     acceptTerms: true,
     acceptPrivacy: true,
     shouldRegisterSuccessfully: false,
-    expectedInvalidField: 'lastName',
+    expectedInvalidFields: ['lastName'],
   },
   withoutEmail: {
     firstName: generateFirstName(),
@@ -53,7 +53,7 @@ export const invalidUsers = {
     acceptTerms: true,
     acceptPrivacy: true,
     shouldRegisterSuccessfully: false,
-    expectedInvalidField: 'email',
+    expectedInvalidFields: ['email'],
   },
   withInvalidEmailFormat: {
     firstName: generateFirstName(),
@@ -63,7 +63,7 @@ export const invalidUsers = {
     acceptTerms: true,
     acceptPrivacy: true,
     shouldRegisterSuccessfully: false,
-    expectedInvalidField: 'email',
+    expectedInvalidFields: ['email'],
   },
   withoutPassword: {
     firstName: generateFirstName(),
@@ -73,7 +73,7 @@ export const invalidUsers = {
     acceptTerms: true,
     acceptPrivacy: true,
     shouldRegisterSuccessfully: false,
-    expectedInvalidField: 'password',
+    expectedInvalidFields: ['password'],
   },
   withShortPassword: {
     firstName: generateFirstName(),
@@ -83,7 +83,7 @@ export const invalidUsers = {
     acceptTerms: true,
     acceptPrivacy: true,
     shouldRegisterSuccessfully: false,
-    expectedInvalidField: 'password',
+    expectedInvalidFields: ['password'],
   },
   withoutTermsAcceptance: {
     firstName: generateFirstName(),
@@ -93,7 +93,7 @@ export const invalidUsers = {
     acceptTerms: false,
     acceptPrivacy: true,
     shouldRegisterSuccessfully: false,
-    expectedInvalidField: 'terms',
+    expectedInvalidFields: ['terms'],
   },
   withoutPrivacyAcceptance: {
     firstName: generateFirstName(),
@@ -103,7 +103,7 @@ export const invalidUsers = {
     acceptTerms: true,
     acceptPrivacy: false,
     shouldRegisterSuccessfully: false,
-    expectedInvalidField: 'privacy',
+    expectedInvalidFields: ['privacy'],
   },
   withInvalidBirthDate: {
     firstName: generateFirstName(),
@@ -115,6 +115,16 @@ export const invalidUsers = {
     acceptPrivacy: true,
     shouldRegisterSuccessfully: false,
     expectedErrorMessage: 'Format should be 05/31/1970.',
+  },
+  emptyRequiredForm: {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    acceptTerms: false,
+    acceptPrivacy: false,
+    shouldRegisterSuccessfully: false,
+    expectedInvalidFields: ['firstName', 'lastName', 'email', 'password', 'terms', 'privacy'],
   },
 } satisfies Record<string, SignUpData>;
 

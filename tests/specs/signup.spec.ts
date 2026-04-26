@@ -59,26 +59,31 @@ test.describe('Sign up - required field validation', () => {
   }) => {
     await signUpPage.createAccount(invalidUsers.withoutPrivacyAcceptance);
   });
-});
 
+  test('[TC-SIGNUP-009] User should not be able to sign up with empty required form', async ({
+    signUpPage,
+  }) => {
+    await signUpPage.createAccount(invalidUsers.emptyRequiredForm);
+  });
+});
 test.describe('Sign up - format validation', () => {
   test.beforeEach(async ({ signUpPage }) => {
     await signUpPage.navigate();
   });
 
-  test('[TC-SIGNUP-009] User should not be able to sign up with invalid email format', async ({
+  test('[TC-SIGNUP-010] User should not be able to sign up with invalid email format', async ({
     signUpPage,
   }) => {
     await signUpPage.createAccount(invalidUsers.withInvalidEmailFormat);
   });
 
-  test('[TC-SIGNUP-010] User should not be able to sign up with short password', async ({
+  test('[TC-SIGNUP-011] User should not be able to sign up with short password', async ({
     signUpPage,
   }) => {
     await signUpPage.createAccount(invalidUsers.withShortPassword);
   });
 
-  test('[TC-SIGNUP-011] User should not be able to sign up with invalid birth date format', async ({
+  test('[TC-SIGNUP-012] User should not be able to sign up with invalid birth date format', async ({
     signUpPage,
   }) => {
     await signUpPage.createAccount(invalidUsers.withInvalidBirthDate);
