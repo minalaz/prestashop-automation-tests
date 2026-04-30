@@ -1,9 +1,9 @@
 import { expect, type FrameLocator, type Locator, type Page } from '@playwright/test';
 import type { InvalidField, SignUpData } from '../data/signUpData';
-
+const EXPECT_TIMEOUT = 20000;
 export class SignUpPage {
   constructor(private page: Page) {}
-
+  //Locators - define elements on Registration page
   private get frame(): FrameLocator {
     return this.page.frameLocator('iframe[name="framelive"]');
   }
@@ -76,51 +76,45 @@ export class SignUpPage {
   private get submitButton(): Locator {
     return this.frame.getByRole('button', { name: 'Create account' });
   }
-
+  //Navigation - Opens the Registration form from the Prestashop demo homepage
   async navigate(): Promise<void> {
     await this.page.goto('/');
     await this.page.waitForLoadState('networkidle');
-
+    await expect(this.signInTrigger).toBeVisible({ timeout: EXPECT_TIMEOUT });
     await this.signInTrigger.click();
+    await expect(this.createAccountLink).toBeVisible({ timeout: EXPECT_TIMEOUT });
     await this.createAccountLink.click();
-
-    await expect(this.firstNameInput).toBeVisible();
+    await expect(this.firstNameInput).toBeVisible({ timeout: EXPECT_TIMEOUT });
   }
+  //Fill form - fills registration fields and selects checkboxes based on test data
   async fillForm(data: SignUpData): Promise<void> {
     if (data.socialTitle === 'Mr.') {
       await this.socialTitleMrRadio.check();
     }
-
     if (data.socialTitle === 'Mrs.') {
       await this.socialTitleMrsRadio.check();
     }
-
     await this.firstNameInput.fill(data.firstName);
     await this.lastNameInput.fill(data.lastName);
     await this.emailInput.fill(data.email);
     await this.passwordInput.fill(data.password);
-
     if (data.birthDate) {
       await this.birthDateInput.fill(data.birthDate);
     }
-
     if (data.receiveOffers) {
       await this.receiveOffersCheckbox.check();
     }
-
-    if (data.newsletter) {
-      await this.newsletterCheckbox.check();
-    }
-
     if (data.acceptTerms) {
       await this.acceptTermsCheckbox.check();
     }
-
+    if (data.newsletter) {
+      await this.newsletterCheckbox.check();
+    }
     if (data.acceptPrivacy) {
       await this.acceptPrivacyCheckbox.check();
     }
   }
-
+  //Submitting the registration form
   async submit(): Promise<void> {
     await this.submitButton.click();
   }
@@ -136,6 +130,45 @@ export class SignUpPage {
 
     return fields[field];
   }
+  //Form validation - verifies that input values and checkbox states match the provided test data
+  async expectEnteredData(data: SignUpData): Promise<void> {
+    if (data.socialTitle !== undefined) {
+      if (data.socialTitle === 'Mr.') {
+        await expect(this.socialTitleMrRadio).toBeChecked();
+      } else {
+        await expect(this.socialTitleMrsRadio).toBeChecked();
+      }
+    }
+    await expect(this.firstNameInput).toHaveValue(data.firstName);
+    await expect(this.lastNameInput).toHaveValue(data.lastName);
+    await expect(this.emailInput).toHaveValue(data.email);
+    await expect(this.passwordInput).toHaveValue(data.password);
+
+    if (data.birthDate !== undefined) {
+      await expect(this.birthDateInput).toHaveValue(data.birthDate);
+    }
+    if (data.receiveOffers) {
+      await expect(this.receiveOffersCheckbox).toBeChecked();
+    } else {
+      await expect(this.receiveOffersCheckbox).not.toBeChecked();
+    }
+    if (data.acceptTerms) {
+      await expect(this.acceptTermsCheckbox).toBeChecked();
+    } else {
+      await expect(this.acceptTermsCheckbox).not.toBeChecked();
+    }
+    if (data.newsletter) {
+      await expect(this.newsletterCheckbox).toBeChecked();
+    } else {
+      await expect(this.newsletterCheckbox).not.toBeChecked();
+    }
+    if (data.acceptPrivacy) {
+      await expect(this.acceptPrivacyCheckbox).toBeChecked();
+    } else {
+      await expect(this.acceptPrivacyCheckbox).not.toBeChecked();
+    }
+  }
+  //Result validations
   private async expectInvalidField(field: InvalidField): Promise<void> {
     const locator = this.getFieldByName(field);
 
@@ -164,8 +197,10 @@ export class SignUpPage {
       await expect(this.errorMessage(data.expectedErrorMessage)).toBeVisible();
     }
   }
+  //Verifies whether registration was successfull or blocked by validation
   async createAccount(data: SignUpData): Promise<void> {
     await this.fillForm(data);
+    await this.expectEnteredData(data);
     await this.submit();
 
     if (data.shouldRegisterSuccessfully) {

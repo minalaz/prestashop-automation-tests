@@ -4,6 +4,7 @@ import {
   generateFirstName,
   generateLastName,
   generatePassword,
+  generateSocialTitle,
 } from '../helpers/testDataGenerator';
 
 export type InvalidField = 'firstName' | 'lastName' | 'email' | 'password' | 'terms' | 'privacy';
@@ -16,14 +17,14 @@ export interface SignUpData {
   password: string;
   birthDate?: string;
   receiveOffers?: boolean;
-  newsletter?: boolean;
   acceptTerms: boolean;
+  newsletter?: boolean;
   acceptPrivacy: boolean;
   shouldRegisterSuccessfully: boolean;
   expectedErrorMessage?: string;
   expectedInvalidFields?: InvalidField[];
 }
-
+//Invalid regsitration form scenarios
 export const invalidUsers = {
   withoutFirstName: {
     firstName: '',
@@ -127,7 +128,7 @@ export const invalidUsers = {
     expectedInvalidFields: ['firstName', 'lastName', 'email', 'password', 'terms', 'privacy'],
   },
 } satisfies Record<string, SignUpData>;
-
+//Valid required user data
 export function createValidRequiredUser(): SignUpData {
   return {
     firstName: generateFirstName(),
@@ -139,18 +140,18 @@ export function createValidRequiredUser(): SignUpData {
     shouldRegisterSuccessfully: true,
   };
 }
-
+//Valid full user data
 export function createValidFullUser(): SignUpData {
   return {
-    socialTitle: 'Mrs.',
+    socialTitle: generateSocialTitle(),
     firstName: generateFirstName(),
     lastName: generateLastName(),
     email: generateEmail(),
     password: generatePassword(),
     birthDate: generateBirthDate(),
     receiveOffers: true,
-    newsletter: true,
     acceptTerms: true,
+    newsletter: true,
     acceptPrivacy: true,
     shouldRegisterSuccessfully: true,
   };
