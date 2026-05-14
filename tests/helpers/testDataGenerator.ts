@@ -1,5 +1,5 @@
 //Test data pools used for generating random user information
-const firstNames = ['Vanja', 'Sasa', 'Luka', 'Anrdrea', 'Mika'];
+const firstNames = ['Vanja', 'Sasa', 'Luka', 'Andrea', 'Mika'];
 const lastNames = ['Petrovic', 'Jovanovic', 'Maric', 'Saric', 'Milanovic'];
 
 //Returns a random item from the provided array
